@@ -101,6 +101,9 @@ fi
 # determine the git repository path
 if [ ! -n "$GIT_DIR" ]; then
  GIT_DIR="$PWD/.git"
+ if [ -f $GIT_DIR ]; do
+    GIT_DIR="$PWD/`cut "$GIT_DIR" -c 9-`"
+ done
  GIT_DIR_ABSOLUTE=0
 else
  GIT_DIR_ABSOLUTE=1
@@ -184,7 +187,7 @@ $DEBUG $CMD
 
 # step 1b - update super-repository's submodule "path" (in ./.gitmodules)
 $VERBOSE && echo " updating super-repository's submodule path"
-CMD="sed -i s%\(.*path.=.\)\($SRC_PATH\)%\1$DEST_PATH$GIT_PROJECT% $GIT_MODULES"
+CMD="sed -i s%\(.*path.=.\)\($SRC_PATH\)%\\1$DEST_PATH$GIT_PROJECT% $GIT_MODULES"
 $DEBUG $CMD
 
 if [ $GIT_MODULES_URL_FILE -eq 1 ]; then
